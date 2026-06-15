@@ -1,8 +1,11 @@
 import ShelterExplorer from "@/components/ShelterExplorer";
 import { getShelters } from "@/lib/store";
 
-export default function HomePage() {
-  const shelters = getShelters();
+// 공공 API·슬롯 변경이 반영되도록 동적 렌더링
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  const shelters = await getShelters();
 
   return (
     <main className="container">

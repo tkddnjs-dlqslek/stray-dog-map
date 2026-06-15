@@ -17,7 +17,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Link href="/" className="logo">
               🐾 멍플래너<span> · 봉사지도</span>
             </Link>
-            <span className="tagline">근처 보호소를 지도에서 · 빈 시간대 바로 신청</span>
+            <Link href="/manage" className="nav-link">
+              운영자 콘솔
+            </Link>
           </div>
         </header>
         {children}

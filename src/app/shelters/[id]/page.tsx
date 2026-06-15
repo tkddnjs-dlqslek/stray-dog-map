@@ -1,14 +1,13 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import BookingPanel from "@/components/BookingPanel";
-import { getShelter, getShelters } from "@/lib/store";
+import { getShelter } from "@/lib/store";
 
-export function generateStaticParams() {
-  return getShelters().map((s) => ({ id: s.id }));
-}
+// 운영자 콘솔에서 수정한 슬롯·공공 API 보호소가 즉시 반영되도록 동적 렌더링
+export const dynamic = "force-dynamic";
 
-export default function ShelterDetail({ params }: { params: { id: string } }) {
-  const shelter = getShelter(params.id);
+export default async function ShelterDetail({ params }: { params: { id: string } }) {
+  const shelter = await getShelter(params.id);
   if (!shelter) notFound();
 
   return (

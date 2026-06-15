@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "모든 항목을 입력해주세요." }, { status: 400 });
   }
 
-  const shelter = getShelter(shelterId);
+  const shelter = await getShelter(shelterId);
   if (!shelter) {
     return NextResponse.json({ error: "존재하지 않는 보호소입니다." }, { status: 404 });
   }

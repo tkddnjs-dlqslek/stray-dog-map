@@ -63,6 +63,65 @@ a {
   font-size: 13px;
 }
 
+.nav-link {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--brand);
+  border: 1px solid var(--brand);
+  border-radius: 8px;
+  padding: 7px 14px;
+}
+
+.nav-link:hover {
+  background: var(--brand-weak);
+}
+
+.slot-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.slot-table th,
+.slot-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  font-size: 14px;
+}
+
+.slot-table th {
+  background: #f8fafc;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.slot-table input,
+.slot-table select {
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.btn-icon {
+  border: none;
+  background: transparent;
+  color: var(--danger);
+  font-size: 15px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.btn-icon:hover {
+  background: #fdecea;
+  border-radius: 6px;
+}
+
 .hero {
   padding: 28px 0 8px;
 }

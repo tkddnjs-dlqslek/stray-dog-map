@@ -1,24 +1,71 @@
 import fs from "fs";
 import path from "path";
 import sheltersSeed from "../../data/shelters.json";
-import type { Booking, Shelter } from "./types";
+import { fetchPublicShelters } from "./animalApi";
+import type { Booking, Shelter, TimeSlot } from "./types";
 
-// 보호소 데이터: 지금은 시드 JSON. 추후 동물보호관리시스템 공공 API로 교체 가능한 지점.
-export function getShelters(): Shelter[] {
-  return sheltersSeed as Shelter[];
+const DATA_DIR = path.join(process.cwd(), "data");
+const SLOTS_PATH = path.join(DATA_DIR, "slots.json");
+const BOOKINGS_PATH = path.join(DATA_DIR, "bookings.json");
+
+// ── 슬롯 오버라이드 (운영자 콘솔이 수정하는 영속 데이터) ─────────────────
+// 시드 보호소의 slots를 기본값으로 쓰되, 콘솔에서 저장하면 이 파일이 우선한다.
+type SlotsStore = Record<string, TimeSlot[]>;
+
+function readSlotsStore(): SlotsStore {
+  try {
+    return JSON.parse(fs.readFileSync(SLOTS_PATH, "utf-8")) as SlotsStore;
+  } catch {
+    return {};
+  }
 }
 
-export function getShelter(id: string): Shelter | undefined {
-  return getShelters().find((s) => s.id === id);
+export function getSlots(shelterId: string): TimeSlot[] | undefined {
+  return readSlotsStore()[shelterId];
 }
 
-// 예약은 data/bookings.json 파일에 영속화 (MVP용 간이 저장소).
-const BOOKINGS_PATH = path.join(process.cwd(), "data", "bookings.json");
+export function setSlots(shelterId: string, slots: TimeSlot[]): void {
+  const store = readSlotsStore();
+  store[shelterId] = slots;
+  fs.writeFileSync(SLOTS_PATH, JSON.stringify(store, null, 2), "utf-8");
+}
 
+// ── 보호소 데이터 ────────────────────────────────────────────────────────
+// 시드(사설 + 일부 공공) + 공공 API(전국 공공 보호소). 슬롯 오버라이드 반영.
+function localShelters(): Shelter[] {
+  const overrides = readSlotsStore();
+  return (sheltersSeed as Shelter[]).map((s) => ({
+    ...s,
+    slots: overrides[s.id] ?? s.slots,
+  }));
+}
+
+export async function getShelters(): Promise<Shelter[]> {
+  const local = localShelters();
+  let pub: Shelter[] = [];
+  try {
+    pub = await fetchPublicShelters(); // 키 없으면 []
+  } catch {
+    pub = [];
+  }
+  // 시드 id와 충돌하지 않는 공공 보호소만 추가
+  const ids = new Set(local.map((s) => s.id));
+  return [...local, ...pub.filter((s) => !ids.has(s.id))];
+}
+
+export async function getShelter(id: string): Promise<Shelter | undefined> {
+  return (await getShelters()).find((s) => s.id === id);
+}
+
+/** 정적 경로 생성·테스트용: 공공 API 없이 로컬 시드만 */
+export function getLocalShelters(): Shelter[] {
+  return localShelters();
+}
+
+// ── 예약 저장소 ──────────────────────────────────────────────────────────
 export function readBookings(): Booking[] {
   try {
-    const raw = fs.readFileSync(BOOKINGS_PATH, "utf-8");
-    return JSON.parse(raw) as Booking[];
+    return JSON.parse(fs.readFileSync(BOOKINGS_PATH, "utf-8")) as Booking[];
   } catch {
     return [];
   }
