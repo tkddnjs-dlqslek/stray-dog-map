@@ -328,6 +328,11 @@ a {
   color: #475569;
 }
 
+.badge-ext {
+  background: #f3e8ff;
+  color: #7e22ce;
+}
+
 .muted {
   color: var(--muted);
   font-size: 13px;

@@ -1,5 +1,8 @@
-// 봉사 신청 방식: 1365 딥링크 연결 vs 우리 서비스 자체 예약
-export type ApplyMethod = "self" | "link1365";
+// 봉사 신청 방식:
+//  - self        : 멍플래너 자체 타임테이블 예약
+//  - link1365    : 1365 자원봉사포털 모집글로 연결(봉사시간 인증)
+//  - linkExternal: 보호소 자체 신청 채널(네이버폼/구글폼/오픈카톡/인스타 등)로 연결
+export type ApplyMethod = "self" | "link1365" | "linkExternal";
 
 export interface TimeSlot {
   id: string;
@@ -50,8 +53,19 @@ export interface Shelter {
   applyMethod: ApplyMethod;
   /** applyMethod === "link1365" 일 때 연결할 1365 모집글 URL */
   link1365?: string;
+  /** applyMethod === "linkExternal" 일 때 연결할 보호소 자체 신청 URL */
+  applyUrl?: string;
+  /** linkExternal 신청 채널 종류 라벨 (예: "네이버폼", "오픈카톡") */
+  applyChannel?: string;
   /** applyMethod === "self" 일 때 노출할 주간 봉사 타임슬롯 */
   slots: TimeSlot[];
+  /** 예약 발생 시 보호소가 알림을 받을 채널 (운영자 콘솔에서 설정) */
+  notify?: NotifyConfig;
+}
+
+export interface NotifyConfig {
+  /** Discord/Slack/일반 웹훅 URL. 예약 완료 시 이 주소로 POST 발송 */
+  webhook?: string;
 }
 
 export interface Booking {

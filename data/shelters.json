@@ -267,5 +267,35 @@
       { "id": "z2", "weekday": 0, "start": "10:00", "end": "13:00", "capacity": 4, "label": "오전 사회화" },
       { "id": "z3", "weekday": 5, "start": "14:00", "end": "17:00", "capacity": 3, "label": "금요일 오후 케어" }
     ]
+  },
+  {
+    "id": "jeonnam-suncheon",
+    "name": "순천 들녘보호소",
+    "kind": "private",
+    "region": "전남",
+    "lat": 34.9506,
+    "lng": 127.4872,
+    "address": "전라남도 순천시 중앙로 100",
+    "phone": "010-5050-6060",
+    "description": "타임테이블 대신 기존에 쓰던 네이버폼으로 봉사 신청을 받는 사설보호소입니다. 신청 후 운영자가 일정을 개별 안내해요.",
+    "applyMethod": "linkExternal",
+    "applyChannel": "네이버폼",
+    "applyUrl": "https://naver.me/example-suncheon-form",
+    "slots": []
+  },
+  {
+    "id": "chungbuk-cheongju",
+    "name": "청주 마음쉼터",
+    "kind": "private",
+    "region": "충북",
+    "lat": 36.6424,
+    "lng": 127.4890,
+    "address": "충청북도 청주시 상당구 상당로 80",
+    "phone": "010-7070-8080",
+    "description": "오픈채팅으로 봉사자를 모집하는 사설보호소. 입장 후 공지된 일정 중 원하는 날에 참여하면 됩니다.",
+    "applyMethod": "linkExternal",
+    "applyChannel": "오픈카톡",
+    "applyUrl": "https://open.kakao.com/o/example-cheongju",
+    "slots": []
   }
 ]

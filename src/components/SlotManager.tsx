@@ -33,7 +33,44 @@ export default function SlotManager({ shelters }: { shelters: Shelter[] }) {
   const [msg, setMsg] = useState<{ type: "ok" | "err"; text: string } | null>(null);
   const [saving, setSaving] = useState(false);
 
+  // 보호소별 알림 웹훅 URL
+  const initialNotify = useMemo<Record<string, string>>(
+    () => Object.fromEntries(shelters.map((s) => [s.id, s.notify?.webhook ?? ""])),
+    [shelters]
+  );
+  const [notifyById, setNotifyById] = useState(initialNotify);
+  const [notifyMsg, setNotifyMsg] = useState<{ type: "ok" | "err"; text: string } | null>(null);
+  const [savingNotify, setSavingNotify] = useState(false);
+
   const slots = slotsById[shelterId] ?? [];
+  const webhook = notifyById[shelterId] ?? "";
+
+  async function saveNotify() {
+    setSavingNotify(true);
+    setNotifyMsg(null);
+    try {
+      const res = await fetch("/api/notify", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ shelterId, webhook }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setNotifyMsg({ type: "err", text: data.error ?? "저장 실패" });
+      } else {
+        setNotifyMsg({
+          type: "ok",
+          text: webhook
+            ? "알림 채널 저장됨. 이제 예약이 들어오면 이 웹훅으로 메시지가 갑니다."
+            : "알림 채널을 비웠어요. 예약은 콘솔에서만 확인됩니다.",
+        });
+      }
+    } catch {
+      setNotifyMsg({ type: "err", text: "네트워크 오류" });
+    } finally {
+      setSavingNotify(false);
+    }
+  }
 
   function update(next: EditableSlot[]) {
     setSlotsById((m) => ({ ...m, [shelterId]: next }));
@@ -176,6 +213,36 @@ export default function SlotManager({ shelters }: { shelters: Shelter[] }) {
           {msg.text}
         </p>
       )}
+
+      <div className="card" style={{ marginTop: 24 }}>
+        <h2 style={{ fontSize: 16, margin: "0 0 4px" }}>📨 예약 알림 채널</h2>
+        <p className="muted" style={{ marginTop: 0 }}>
+          예약이 들어오면 이 주소로 알림 메시지가 전송됩니다. Discord/Slack 채널의 웹훅 URL을
+          붙여넣으세요. (비워두면 콘솔에서만 확인)
+        </p>
+        <div className="form-row">
+          <label>웹훅 URL</label>
+          <input
+            value={webhook}
+            placeholder="https://discord.com/api/webhooks/..."
+            onChange={(e) => {
+              setNotifyById((m) => ({ ...m, [shelterId]: e.target.value }));
+              setNotifyMsg(null);
+            }}
+          />
+        </div>
+        <button className="btn" onClick={saveNotify} disabled={savingNotify}>
+          {savingNotify ? "저장 중…" : "알림 채널 저장"}
+        </button>
+        {notifyMsg && (
+          <p
+            className={notifyMsg.type === "ok" ? "msg-ok" : "msg-err"}
+            style={{ marginTop: 12 }}
+          >
+            {notifyMsg.text}
+          </p>
+        )}
+      </div>
     </div>
   );
 }

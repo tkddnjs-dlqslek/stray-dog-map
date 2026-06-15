@@ -47,7 +47,13 @@ export default function KakaoMapView({
     el.innerHTML = `
       <strong>${s.name}</strong>
       <div class="kakao-info-addr">${s.address}</div>
-      <div class="kakao-info-tag">${s.applyMethod === "self" ? "✅ 자체예약" : "🔗 1365 연결"}</div>
+      <div class="kakao-info-tag">${
+        s.applyMethod === "self"
+          ? "✅ 자체예약"
+          : s.applyMethod === "link1365"
+          ? "🔗 1365 연결"
+          : "🔗 외부 신청"
+      }</div>
       <a class="kakao-info-link">자세히 보기 →</a>`;
     el.querySelector("a")!.addEventListener("click", () => router.push(`/shelters/${s.id}`));
     const info = new kakao.maps.CustomOverlay({ position: pos, content: el, yAnchor: 1.35, zIndex: 10 });

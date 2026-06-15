@@ -63,7 +63,11 @@ export default function MapView({ shelters }: { shelters: Shelter[] }) {
             <span style={{ color: "#6b7280", fontSize: 12 }}>{s.address}</span>
             <br />
             <span style={{ fontSize: 12 }}>
-              {s.applyMethod === "self" ? "✅ 자체 타임테이블 예약" : "🔗 1365 연결"}
+              {s.applyMethod === "self"
+                ? "✅ 자체 타임테이블 예약"
+                : s.applyMethod === "link1365"
+                ? "🔗 1365 연결"
+                : "🔗 외부 신청"}
             </span>
             <br />
             <Link href={`/shelters/${s.id}`} style={{ color: "#2f7d5b", fontWeight: 700 }}>

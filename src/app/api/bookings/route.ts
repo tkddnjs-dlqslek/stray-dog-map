@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { bookedCount, getShelter, readBookings, writeBookings } from "@/lib/store";
+import { notifyShelter } from "@/lib/notify";
 import type { Booking } from "@/lib/types";
 
 export function GET(req: NextRequest) {
@@ -73,5 +74,8 @@ export async function POST(req: NextRequest) {
   bookings.push(booking);
   writeBookings(bookings);
 
-  return NextResponse.json(booking, { status: 201 });
+  // 보호소에 알림 발송 (best-effort — 실패해도 예약은 확정)
+  const notified = await notifyShelter(shelter, slot, booking);
+
+  return NextResponse.json({ ...booking, notified }, { status: 201 });
 }

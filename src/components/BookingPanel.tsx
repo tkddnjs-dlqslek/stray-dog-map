@@ -83,9 +83,12 @@ export default function BookingPanel({ shelter }: { shelter: Shelter }) {
       if (!res.ok) {
         setMsg({ type: "err", text: data.error ?? "신청에 실패했습니다." });
       } else {
+        const notified = data.notified?.sent
+          ? " 보호소에도 알림이 전송됐어요."
+          : " (보호소 알림 채널이 아직 설정되지 않아 콘솔에서 확인합니다.)";
         setMsg({
           type: "ok",
-          text: `신청 완료! ${fmtDate(date)} ${selected.start} 봉사에 ${people}명 예약됐어요.`,
+          text: `신청 완료! ${fmtDate(date)} ${selected.start} 봉사에 ${people}명 예약됐어요.${notified}`,
         });
         setName("");
         setPhone("");

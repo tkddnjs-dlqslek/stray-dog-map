@@ -31,7 +31,7 @@ export default async function ShelterDetail({ params }: { params: { id: string }
         {shelter.description}
       </p>
 
-      {shelter.applyMethod === "link1365" ? (
+      {shelter.applyMethod === "link1365" && (
         <>
           <div className="notice">
             이 보호소는 <strong>1365 자원봉사포털</strong>을 통해 신청하면 <strong>봉사시간 인증</strong>
@@ -41,11 +41,25 @@ export default async function ShelterDetail({ params }: { params: { id: string }
             1365에서 신청하기 →
           </a>
         </>
-      ) : (
+      )}
+
+      {shelter.applyMethod === "linkExternal" && (
+        <>
+          <div className="notice">
+            이 보호소는 자체 <strong>{shelter.applyChannel ?? "신청 채널"}</strong>로 봉사자를 받아요.
+            아래 버튼으로 이동해 신청하면 <strong>보호소에 바로 접수</strong>됩니다.
+          </div>
+          <a className="btn" href={shelter.applyUrl} target="_blank" rel="noopener noreferrer">
+            {shelter.applyChannel ?? "신청 채널"}로 신청하기 →
+          </a>
+        </>
+      )}
+
+      {shelter.applyMethod === "self" && (
         <>
           <div className="notice">
             이곳은 1365에 등록되지 않은 <strong>사설보호소</strong>예요. 멍플래너에서 바로 시간대를
-            골라 신청할 수 있습니다.
+            골라 신청하면 <strong>보호소에 알림이 전달</strong>됩니다.
           </div>
           <BookingPanel shelter={shelter} />
         </>

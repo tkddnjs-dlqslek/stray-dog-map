@@ -11,7 +11,13 @@ const REGION_ORDER: Region[] = [
   "전북", "전남", "광주", "경북", "경남", "대구", "울산", "부산", "제주",
 ];
 
-type ApplyFilter = "all" | "self" | "link1365";
+type ApplyFilter = "all" | "self" | "external";
+
+function applyBadge(method: Shelter["applyMethod"]): { cls: string; label: string } {
+  if (method === "self") return { cls: "badge-self", label: "자체예약" };
+  if (method === "link1365") return { cls: "badge-1365", label: "1365 연결" };
+  return { cls: "badge-ext", label: "신청링크" };
+}
 
 export default function ShelterExplorer({ shelters }: { shelters: Shelter[] }) {
   const [region, setRegion] = useState<Region | "전체">("전체");
@@ -30,7 +36,8 @@ export default function ShelterExplorer({ shelters }: { shelters: Shelter[] }) {
   const filtered = useMemo(() => {
     return shelters.filter((s) => {
       if (region !== "전체" && s.region !== region) return false;
-      if (apply !== "all" && s.applyMethod !== apply) return false;
+      if (apply === "self" && s.applyMethod !== "self") return false;
+      if (apply === "external" && s.applyMethod === "self") return false;
       return true;
     });
   }, [shelters, region, apply]);
@@ -61,7 +68,7 @@ export default function ShelterExplorer({ shelters }: { shelters: Shelter[] }) {
             [
               ["all", "신청방식 전체"],
               ["self", "✅ 자체예약"],
-              ["link1365", "🔗 1365 연결"],
+              ["external", "🔗 외부 신청"],
             ] as [ApplyFilter, string][]
           ).map(([val, label]) => (
             <button
@@ -99,10 +106,8 @@ export default function ShelterExplorer({ shelters }: { shelters: Shelter[] }) {
                   >
                     {s.kind === "public" ? "공공" : "사설"}
                   </span>
-                  <span
-                    className={`badge ${s.applyMethod === "self" ? "badge-self" : "badge-1365"}`}
-                  >
-                    {s.applyMethod === "self" ? "자체예약" : "1365 연결"}
+                  <span className={`badge ${applyBadge(s.applyMethod).cls}`}>
+                    {applyBadge(s.applyMethod).label}
                   </span>
                 </div>
                 <div className="muted">{s.address}</div>

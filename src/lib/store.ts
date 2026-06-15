@@ -2,10 +2,11 @@ import fs from "fs";
 import path from "path";
 import sheltersSeed from "../../data/shelters.json";
 import { fetchPublicShelters } from "./animalApi";
-import type { Booking, Shelter, TimeSlot } from "./types";
+import type { Booking, NotifyConfig, Shelter, TimeSlot } from "./types";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 const SLOTS_PATH = path.join(DATA_DIR, "slots.json");
+const NOTIFY_PATH = path.join(DATA_DIR, "notify.json");
 const BOOKINGS_PATH = path.join(DATA_DIR, "bookings.json");
 
 // ── 슬롯 오버라이드 (운영자 콘솔이 수정하는 영속 데이터) ─────────────────
@@ -30,13 +31,36 @@ export function setSlots(shelterId: string, slots: TimeSlot[]): void {
   fs.writeFileSync(SLOTS_PATH, JSON.stringify(store, null, 2), "utf-8");
 }
 
+// ── 알림 채널 오버라이드 (운영자 콘솔이 설정하는 영속 데이터) ─────────────
+type NotifyStore = Record<string, NotifyConfig>;
+
+function readNotifyStore(): NotifyStore {
+  try {
+    return JSON.parse(fs.readFileSync(NOTIFY_PATH, "utf-8")) as NotifyStore;
+  } catch {
+    return {};
+  }
+}
+
+export function getNotify(shelterId: string): NotifyConfig | undefined {
+  return readNotifyStore()[shelterId];
+}
+
+export function setNotify(shelterId: string, config: NotifyConfig): void {
+  const store = readNotifyStore();
+  store[shelterId] = config;
+  fs.writeFileSync(NOTIFY_PATH, JSON.stringify(store, null, 2), "utf-8");
+}
+
 // ── 보호소 데이터 ────────────────────────────────────────────────────────
-// 시드(사설 + 일부 공공) + 공공 API(전국 공공 보호소). 슬롯 오버라이드 반영.
+// 시드(사설 + 일부 공공) + 공공 API(전국 공공 보호소). 슬롯·알림 오버라이드 반영.
 function localShelters(): Shelter[] {
-  const overrides = readSlotsStore();
+  const slotOverrides = readSlotsStore();
+  const notifyOverrides = readNotifyStore();
   return (sheltersSeed as Shelter[]).map((s) => ({
     ...s,
-    slots: overrides[s.id] ?? s.slots,
+    slots: slotOverrides[s.id] ?? s.slots,
+    notify: notifyOverrides[s.id] ?? s.notify,
   }));
 }
 
