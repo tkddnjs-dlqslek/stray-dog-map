@@ -67,6 +67,32 @@
 - 보호소 데이터: `data/shelters.json` 시드 (추후 공공 API로 교체)
 - 예약 저장: `data/bookings.json` 파일 기반 간이 저장소 (추후 DB로 교체)
 
+## 배포
+
+이 앱은 API 라우트·동적 렌더링을 쓰므로 **Node 호스트**가 필요합니다(정적 export 불가).
+예약·등록 등 쓰기 데이터는 `DATA_DIR`(쓰기 가능 경로)에 저장됩니다.
+
+### A. Vercel (가장 빠름)
+1. GitHub 저장소를 [Vercel](https://vercel.com/new)에서 **Import** (Next.js 자동 인식, 빌드 설정 불필요)
+2. 환경변수 설정: `DATA_DIR=/tmp/data`, `ADMIN_TOKEN=...`, (선택) `ANIMAL_SERVICE_KEY`, `SMTP_*`
+3. Deploy.
+   - ⚠️ 서버리스 FS는 `/tmp`만 쓰기 가능하고 **인스턴스마다 휘발**됩니다. 실서비스 데이터 영속화는
+     **DB(예: Vercel Postgres/KV, Supabase)로 이전** 필요 — `src/lib/store.ts`의 read/write만 교체하면 됩니다.
+   - CI 자동배포: `.github/workflows/deploy.yml` (시크릿 `VERCEL_TOKEN`/`VERCEL_ORG_ID`/`VERCEL_PROJECT_ID`
+     등록 시 main push마다 배포, 없으면 skip).
+
+### B. Docker (영속 볼륨 — 권장)
+```bash
+docker build -t mung-planner .
+docker run -p 3000:3000 -v mung-data:/data \
+  -e ADMIN_TOKEN=changeme -e ANIMAL_SERVICE_KEY=... mung-planner
+```
+`output: "standalone"`로 최소 이미지를 만들고, `/data` 볼륨에 데이터를 영속화합니다.
+Render/Railway/Fly.io 등 컨테이너 호스트에 그대로 올릴 수 있어요.
+
+> 검증: 프로덕션 standalone 산출물(`.next/standalone/server.js`)을 외부 `DATA_DIR`로 기동해
+> 홈/등록(write)/검수까지 동작하고 데이터가 외부 경로에 영속됨을 확인했습니다.
+
 ## 실행
 
 ```bash

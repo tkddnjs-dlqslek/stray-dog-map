@@ -4,11 +4,23 @@ import sheltersSeed from "../../data/shelters.json";
 import { fetchPublicShelters } from "./animalApi";
 import type { Booking, NotifyConfig, Shelter, TimeSlot } from "./types";
 
-const DATA_DIR = path.join(process.cwd(), "data");
+// 쓰기 가능한 데이터 디렉터리. 서버리스(읽기전용 FS)·컨테이너 볼륨 대응을 위해 DATA_DIR로 교체 가능.
+// 예: Vercel은 DATA_DIR=/tmp/data, 도커는 /data 볼륨. 미설정 시 프로젝트 ./data.
+const DATA_DIR = process.env.DATA_DIR
+  ? path.resolve(process.env.DATA_DIR)
+  : path.join(process.cwd(), "data");
 const SLOTS_PATH = path.join(DATA_DIR, "slots.json");
 const NOTIFY_PATH = path.join(DATA_DIR, "notify.json");
 const BOOKINGS_PATH = path.join(DATA_DIR, "bookings.json");
 const REGISTERED_PATH = path.join(DATA_DIR, "registered.json");
+
+function ensureDataDir(): void {
+  try {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  } catch {
+    /* 이미 존재하거나 권한 문제 — write 시점에 에러로 드러남 */
+  }
+}
 
 // ── 슬롯 오버라이드 (운영자 콘솔이 수정하는 영속 데이터) ─────────────────
 // 시드 보호소의 slots를 기본값으로 쓰되, 콘솔에서 저장하면 이 파일이 우선한다.
@@ -29,6 +41,7 @@ export function getSlots(shelterId: string): TimeSlot[] | undefined {
 export function setSlots(shelterId: string, slots: TimeSlot[]): void {
   const store = readSlotsStore();
   store[shelterId] = slots;
+  ensureDataDir();
   fs.writeFileSync(SLOTS_PATH, JSON.stringify(store, null, 2), "utf-8");
 }
 
@@ -50,6 +63,7 @@ export function getNotify(shelterId: string): NotifyConfig | undefined {
 export function setNotify(shelterId: string, config: NotifyConfig): void {
   const store = readNotifyStore();
   store[shelterId] = config;
+  ensureDataDir();
   fs.writeFileSync(NOTIFY_PATH, JSON.stringify(store, null, 2), "utf-8");
 }
 
@@ -63,6 +77,7 @@ function readRegistered(): Shelter[] {
 }
 
 function writeRegistered(list: Shelter[]): void {
+  ensureDataDir();
   fs.writeFileSync(REGISTERED_PATH, JSON.stringify(list, null, 2), "utf-8");
 }
 
@@ -147,6 +162,7 @@ export function readBookings(): Booking[] {
 }
 
 export function writeBookings(bookings: Booking[]): void {
+  ensureDataDir();
   fs.writeFileSync(BOOKINGS_PATH, JSON.stringify(bookings, null, 2), "utf-8");
 }
 
