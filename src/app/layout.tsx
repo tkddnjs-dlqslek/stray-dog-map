@@ -24,6 +24,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Link href="/manage" className="nav-link">
                 운영자 콘솔
               </Link>
+              <Link href="/admin" className="nav-link">
+                검수
+              </Link>
             </span>
           </div>
         </header>

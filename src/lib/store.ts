@@ -62,10 +62,44 @@ function readRegistered(): Shelter[] {
   }
 }
 
+function writeRegistered(list: Shelter[]): void {
+  fs.writeFileSync(REGISTERED_PATH, JSON.stringify(list, null, 2), "utf-8");
+}
+
 export function addRegistered(shelter: Shelter): void {
   const list = readRegistered();
   list.push(shelter);
-  fs.writeFileSync(REGISTERED_PATH, JSON.stringify(list, null, 2), "utf-8");
+  writeRegistered(list);
+}
+
+/** 검수 대기 중인 등록 보호소 (최신순) */
+export function getPendingShelters(): Shelter[] {
+  return readRegistered()
+    .filter((s) => s.status === "pending")
+    .sort((a, b) => (b.registeredAt ?? "").localeCompare(a.registeredAt ?? ""));
+}
+
+/** 검수 처리: 승인/거절. 처리된 보호소를 반환(없으면 undefined) */
+export function moderateShelter(
+  id: string,
+  action: "approve" | "reject"
+): Shelter | undefined {
+  const list = readRegistered();
+  const target = list.find((s) => s.id === id);
+  if (!target) return undefined;
+  target.status = action === "approve" ? "approved" : "rejected";
+  writeRegistered(list);
+  return target;
+}
+
+// 공개 노출 대상: 승인된 등록 보호소만 (pending/rejected 제외)
+function approvedRegistered(): Shelter[] {
+  return readRegistered().filter((s) => s.status === "approved");
+}
+
+/** 등록 저장소(대기·승인·거절 포함)에 해당 id가 있는지 — 중복 등록 차단용 */
+export function isRegisteredId(id: string): boolean {
+  return readRegistered().some((s) => s.id === id);
 }
 
 // ── 보호소 데이터 ────────────────────────────────────────────────────────
@@ -73,7 +107,7 @@ export function addRegistered(shelter: Shelter): void {
 function localShelters(): Shelter[] {
   const slotOverrides = readSlotsStore();
   const notifyOverrides = readNotifyStore();
-  const base = [...(sheltersSeed as Shelter[]), ...readRegistered()];
+  const base = [...(sheltersSeed as Shelter[]), ...approvedRegistered()];
   return base.map((s) => ({
     ...s,
     slots: slotOverrides[s.id] ?? s.slots,

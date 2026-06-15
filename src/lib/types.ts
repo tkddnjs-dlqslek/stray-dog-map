@@ -63,6 +63,10 @@ export interface Shelter {
   notify?: NotifyConfig;
   /** 데이터 출처: 시드/커뮤니티 등록/공공 API */
   source?: "seed" | "community" | "public";
+  /** 검수 상태 (커뮤니티 등록 보호소만 사용). 미지정 = 승인된 것으로 간주 */
+  status?: "pending" | "approved" | "rejected";
+  /** 등록 시각(ISO) — 검수 목록 정렬용 */
+  registeredAt?: string;
 }
 
 export interface NotifyConfig {

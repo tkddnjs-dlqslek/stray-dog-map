@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { addRegistered, getShelter } from "@/lib/store";
+import { addRegistered, getShelter, isRegisteredId } from "@/lib/store";
 import { isRegion, regionJitter } from "@/lib/regions";
 import type { Shelter } from "@/lib/types";
 
@@ -34,8 +34,8 @@ export async function POST(req: NextRequest) {
   }
 
   const id = `reg-${slugify(name + address)}`;
-  if (await getShelter(id)) {
-    return NextResponse.json({ error: "이미 등록된 보호소입니다." }, { status: 409 });
+  if (isRegisteredId(id) || (await getShelter(id))) {
+    return NextResponse.json({ error: "이미 등록(또는 신청)된 보호소입니다." }, { status: 409 });
   }
 
   // 좌표 미입력 시 시/도 중심 + 이름 기반 배치 (지오코딩은 운영 단계에서 교체)
@@ -56,6 +56,8 @@ export async function POST(req: NextRequest) {
     slots: [],
     notify: email ? { email } : undefined,
     source: "community",
+    status: "pending",
+    registeredAt: new Date().toISOString(),
   };
 
   addRegistered(shelter);

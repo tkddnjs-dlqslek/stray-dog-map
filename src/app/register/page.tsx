@@ -51,17 +51,14 @@ export default function RegisterPage() {
           ← 지도로 돌아가기
         </Link>
         <div className="card" style={{ marginTop: 16, maxWidth: 560 }}>
-          <h1 style={{ fontSize: 20, marginTop: 0 }}>🎉 등록 완료</h1>
+          <h1 style={{ fontSize: 20, marginTop: 0 }}>🎉 등록 신청 접수</h1>
           <p>
-            <strong>{form.name}</strong>이(가) 지도에 추가됐어요. 이제 <strong>운영자 콘솔</strong>에서
-            봉사 시간대를 등록하면 봉사자들이 신청할 수 있습니다.
+            <strong>{form.name}</strong> 등록 신청이 접수됐어요. <strong>검수 승인 후</strong> 지도에
+            노출되며, 승인되면 <strong>운영자 콘솔</strong>에서 봉사 시간대를 열 수 있습니다.
           </p>
           <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
-            <Link className="btn" href="/manage">
-              운영자 콘솔에서 시간대 등록하기 →
-            </Link>
             <Link className="btn btn-outline" href="/">
-              지도에서 확인
+              지도로 돌아가기
             </Link>
           </div>
         </div>

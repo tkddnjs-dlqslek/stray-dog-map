@@ -376,6 +376,10 @@ a {
   border: 1px solid var(--brand);
 }
 
+.btn-danger {
+  background: var(--danger);
+}
+
 .back-link {
   display: inline-block;
   margin: 16px 0;
