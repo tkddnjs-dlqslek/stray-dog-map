@@ -39,11 +39,17 @@ export default function SlotManager({ shelters }: { shelters: Shelter[] }) {
     [shelters]
   );
   const [notifyById, setNotifyById] = useState(initialNotify);
+  const initialEmail = useMemo<Record<string, string>>(
+    () => Object.fromEntries(shelters.map((s) => [s.id, s.notify?.email ?? ""])),
+    [shelters]
+  );
+  const [emailById, setEmailById] = useState(initialEmail);
   const [notifyMsg, setNotifyMsg] = useState<{ type: "ok" | "err"; text: string } | null>(null);
   const [savingNotify, setSavingNotify] = useState(false);
 
   const slots = slotsById[shelterId] ?? [];
   const webhook = notifyById[shelterId] ?? "";
+  const email = emailById[shelterId] ?? "";
 
   async function saveNotify() {
     setSavingNotify(true);
@@ -52,7 +58,7 @@ export default function SlotManager({ shelters }: { shelters: Shelter[] }) {
       const res = await fetch("/api/notify", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ shelterId, webhook }),
+        body: JSON.stringify({ shelterId, webhook, email }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -60,9 +66,12 @@ export default function SlotManager({ shelters }: { shelters: Shelter[] }) {
       } else {
         setNotifyMsg({
           type: "ok",
-          text: webhook
-            ? "알림 채널 저장됨. 이제 예약이 들어오면 이 웹훅으로 메시지가 갑니다."
-            : "알림 채널을 비웠어요. 예약은 콘솔에서만 확인됩니다.",
+          text:
+            email || webhook
+              ? `알림 채널 저장됨. 예약이 들어오면 ${[email && "이메일", webhook && "웹훅"]
+                  .filter(Boolean)
+                  .join("·")}로 전송됩니다.`
+              : "알림 채널을 비웠어요. 예약은 콘솔에서만 확인됩니다.",
         });
       }
     } catch {
@@ -217,11 +226,22 @@ export default function SlotManager({ shelters }: { shelters: Shelter[] }) {
       <div className="card" style={{ marginTop: 24 }}>
         <h2 style={{ fontSize: 16, margin: "0 0 4px" }}>📨 예약 알림 채널</h2>
         <p className="muted" style={{ marginTop: 0 }}>
-          예약이 들어오면 이 주소로 알림 메시지가 전송됩니다. Discord/Slack 채널의 웹훅 URL을
-          붙여넣으세요. (비워두면 콘솔에서만 확인)
+          예약이 들어오면 아래 채널로 신청 내역이 전송됩니다. (비워두면 콘솔에서만 확인)
         </p>
         <div className="form-row">
-          <label>웹훅 URL</label>
+          <label>이메일 주소</label>
+          <input
+            type="email"
+            value={email}
+            placeholder="shelter@example.com"
+            onChange={(e) => {
+              setEmailById((m) => ({ ...m, [shelterId]: e.target.value }));
+              setNotifyMsg(null);
+            }}
+          />
+        </div>
+        <div className="form-row">
+          <label>웹훅 URL (선택)</label>
           <input
             value={webhook}
             placeholder="https://discord.com/api/webhooks/..."

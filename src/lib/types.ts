@@ -66,6 +66,8 @@ export interface Shelter {
 export interface NotifyConfig {
   /** Discord/Slack/일반 웹훅 URL. 예약 완료 시 이 주소로 POST 발송 */
   webhook?: string;
+  /** 예약 알림을 받을 보호소 이메일 주소 */
+  email?: string;
 }
 
 export interface Booking {

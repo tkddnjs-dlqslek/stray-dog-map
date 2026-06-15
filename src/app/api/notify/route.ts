@@ -21,9 +21,14 @@ export async function PUT(req: NextRequest) {
 
   const webhook = typeof body.webhook === "string" ? body.webhook.trim() : "";
   if (webhook && !/^https?:\/\//.test(webhook)) {
-    return NextResponse.json({ error: "올바른 URL을 입력해주세요." }, { status: 400 });
+    return NextResponse.json({ error: "올바른 웹훅 URL을 입력해주세요." }, { status: 400 });
   }
 
-  setNotify(body.shelterId, { webhook: webhook || undefined });
-  return NextResponse.json({ ok: true, webhook: webhook || null });
+  const email = typeof body.email === "string" ? body.email.trim() : "";
+  if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    return NextResponse.json({ error: "올바른 이메일 주소를 입력해주세요." }, { status: 400 });
+  }
+
+  setNotify(body.shelterId, { webhook: webhook || undefined, email: email || undefined });
+  return NextResponse.json({ ok: true, webhook: webhook || null, email: email || null });
 }

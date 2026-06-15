@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "id": "b_1781498566456_oz15w",
+    "shelterId": "gyeonggi-gwacheon",
+    "slotId": "s1",
+    "date": "2026-06-20",
+    "name": "이봉사",
+    "phone": "010-1234-5678",
+    "people": 2,
+    "createdAt": "2026-06-15T04:42:46.456Z"
+  }
+]
