@@ -1,19 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { bookedCount, getShelter, readBookings, writeBookings } from "@/lib/store";
+import { addBooking, bookedCount, getShelter, readBookings } from "@/lib/store";
 import { notifyShelter } from "@/lib/notify";
 import type { Booking } from "@/lib/types";
 
+export const dynamic = "force-dynamic";
+
 // 공개 조회는 슬롯별 예약 인원 "집계"만 반환한다. (이름·전화 등 개인정보 비공개)
 // 신청자 상세는 오직 보호소 알림(이메일/웹훅)으로만 전달된다.
-export function GET(req: NextRequest) {
+export async function GET(req: NextRequest) {
   const shelterId = req.nextUrl.searchParams.get("shelterId");
   const date = req.nextUrl.searchParams.get("date");
   if (!shelterId || !date) {
     return NextResponse.json({ error: "shelterId와 date가 필요합니다." }, { status: 400 });
   }
   const counts: Record<string, number> = {};
-  for (const b of readBookings()) {
-    if (b.shelterId !== shelterId || b.date !== date) continue;
+  for (const b of await readBookings({ shelterId, date })) {
     counts[b.slotId] = (counts[b.slotId] ?? 0) + b.people;
   }
   return NextResponse.json({ counts });
@@ -57,7 +58,7 @@ export async function POST(req: NextRequest) {
   }
 
   // 정원 검증
-  const already = bookedCount(shelterId, slotId, date);
+  const already = await bookedCount(shelterId, slotId, date);
   const peopleNum = Number(people);
   if (already + peopleNum > slot.capacity) {
     return NextResponse.json(
@@ -77,9 +78,7 @@ export async function POST(req: NextRequest) {
     createdAt: new Date().toISOString(),
   };
 
-  const bookings = readBookings();
-  bookings.push(booking);
-  writeBookings(bookings);
+  await addBooking(booking);
 
   // 보호소에 알림 발송 (best-effort — 실패해도 예약은 확정)
   const notified = await notifyShelter(shelter, slot, booking);

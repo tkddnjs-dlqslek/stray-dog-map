@@ -55,6 +55,6 @@ export async function PUT(req: NextRequest) {
     label: s.label.trim(),
   }));
 
-  setSlots(body.shelterId, slots);
+  await setSlots(body.shelterId, slots);
   return NextResponse.json({ ok: true, slots });
 }

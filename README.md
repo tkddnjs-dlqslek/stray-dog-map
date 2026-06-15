@@ -67,17 +67,28 @@
 - 보호소 데이터: `data/shelters.json` 시드 (추후 공공 API로 교체)
 - 예약 저장: `data/bookings.json` 파일 기반 간이 저장소 (추후 DB로 교체)
 
+## 데이터 저장소 (파일 ↔ Supabase 자동 전환)
+
+`SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`가 설정되면 **Supabase(Postgres)**, 없으면 파일(`DATA_DIR`)에
+저장합니다 (`src/lib/storage`). 백엔드 추상화라 라우트 코드는 동일.
+
+**Supabase 설정:**
+1. [supabase.com](https://supabase.com) 프로젝트 생성
+2. **SQL Editor**에 `supabase/schema.sql` 붙여넣고 실행 (테이블 4개 생성)
+3. **Project Settings > API**에서 `Project URL` → `SUPABASE_URL`, `service_role` 키 → `SUPABASE_SERVICE_ROLE_KEY`
+   (⚠️ service_role 키는 **서버 전용**, 절대 클라이언트/`NEXT_PUBLIC_`에 넣지 마세요)
+4. 환경변수 설정 후 재시작 → 예약·등록·검수·슬롯이 전부 DB에 영속
+
 ## 배포
 
 이 앱은 API 라우트·동적 렌더링을 쓰므로 **Node 호스트**가 필요합니다(정적 export 불가).
-예약·등록 등 쓰기 데이터는 `DATA_DIR`(쓰기 가능 경로)에 저장됩니다.
+데이터는 Supabase(설정 시) 또는 `DATA_DIR` 파일에 저장됩니다.
 
-### A. Vercel (가장 빠름)
+### A. Vercel + Supabase (권장 — 영속성 OK)
 1. GitHub 저장소를 [Vercel](https://vercel.com/new)에서 **Import** (Next.js 자동 인식, 빌드 설정 불필요)
-2. 환경변수 설정: `DATA_DIR=/tmp/data`, `ADMIN_TOKEN=...`, (선택) `ANIMAL_SERVICE_KEY`, `SMTP_*`
-3. Deploy.
-   - ⚠️ 서버리스 FS는 `/tmp`만 쓰기 가능하고 **인스턴스마다 휘발**됩니다. 실서비스 데이터 영속화는
-     **DB(예: Vercel Postgres/KV, Supabase)로 이전** 필요 — `src/lib/store.ts`의 read/write만 교체하면 됩니다.
+2. 환경변수: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `ADMIN_TOKEN`, (선택) `ANIMAL_SERVICE_KEY`, `SMTP_*`
+3. Deploy. → Supabase에 데이터가 영속되므로 서버리스 휘발 문제 없음.
+   - Supabase 없이 띄우려면 `DATA_DIR=/tmp/data` (단, `/tmp`는 인스턴스마다 휘발 — 데모용).
    - CI 자동배포: `.github/workflows/deploy.yml` (시크릿 `VERCEL_TOKEN`/`VERCEL_ORG_ID`/`VERCEL_PROJECT_ID`
      등록 시 main push마다 배포, 없으면 skip).
 

@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
   }
 
   const id = `reg-${slugify(name + address)}`;
-  if (isRegisteredId(id) || (await getShelter(id))) {
+  if ((await isRegisteredId(id)) || (await getShelter(id))) {
     return NextResponse.json({ error: "이미 등록(또는 신청)된 보호소입니다." }, { status: 409 });
   }
 
@@ -60,6 +60,6 @@ export async function POST(req: NextRequest) {
     registeredAt: new Date().toISOString(),
   };
 
-  addRegistered(shelter);
+  await addRegistered(shelter);
   return NextResponse.json({ ok: true, shelter }, { status: 201 });
 }

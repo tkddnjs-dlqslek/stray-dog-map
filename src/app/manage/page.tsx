@@ -3,10 +3,11 @@ import SlotManager from "@/components/SlotManager";
 import { getLocalShelters } from "@/lib/store";
 
 export const metadata = { title: "운영자 콘솔 — 멍플래너" };
+export const dynamic = "force-dynamic";
 
-export default function ManagePage() {
+export default async function ManagePage() {
   // 자체예약(사설) 보호소만 슬롯 관리 대상
-  const shelters = getLocalShelters().filter((s) => s.applyMethod === "self");
+  const shelters = (await getLocalShelters()).filter((s) => s.applyMethod === "self");
 
   return (
     <main className="container">

@@ -29,6 +29,6 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ error: "올바른 이메일 주소를 입력해주세요." }, { status: 400 });
   }
 
-  setNotify(body.shelterId, { webhook: webhook || undefined, email: email || undefined });
+  await setNotify(body.shelterId, { webhook: webhook || undefined, email: email || undefined });
   return NextResponse.json({ ok: true, webhook: webhook || null, email: email || null });
 }
