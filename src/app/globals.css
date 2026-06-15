@@ -63,6 +63,11 @@ a {
   font-size: 13px;
 }
 
+.nav-group {
+  display: flex;
+  gap: 8px;
+}
+
 .nav-link {
   font-size: 14px;
   font-weight: 600;
@@ -70,6 +75,7 @@ a {
   border: 1px solid var(--brand);
   border-radius: 8px;
   padding: 7px 14px;
+  white-space: nowrap;
 }
 
 .nav-link:hover {

@@ -8,6 +8,7 @@ const DATA_DIR = path.join(process.cwd(), "data");
 const SLOTS_PATH = path.join(DATA_DIR, "slots.json");
 const NOTIFY_PATH = path.join(DATA_DIR, "notify.json");
 const BOOKINGS_PATH = path.join(DATA_DIR, "bookings.json");
+const REGISTERED_PATH = path.join(DATA_DIR, "registered.json");
 
 // ── 슬롯 오버라이드 (운영자 콘솔이 수정하는 영속 데이터) ─────────────────
 // 시드 보호소의 slots를 기본값으로 쓰되, 콘솔에서 저장하면 이 파일이 우선한다.
@@ -52,12 +53,28 @@ export function setNotify(shelterId: string, config: NotifyConfig): void {
   fs.writeFileSync(NOTIFY_PATH, JSON.stringify(store, null, 2), "utf-8");
 }
 
+// ── 등록 보호소 (수집/자기등록으로 추가되는 실데이터) ──────────────────────
+function readRegistered(): Shelter[] {
+  try {
+    return JSON.parse(fs.readFileSync(REGISTERED_PATH, "utf-8")) as Shelter[];
+  } catch {
+    return [];
+  }
+}
+
+export function addRegistered(shelter: Shelter): void {
+  const list = readRegistered();
+  list.push(shelter);
+  fs.writeFileSync(REGISTERED_PATH, JSON.stringify(list, null, 2), "utf-8");
+}
+
 // ── 보호소 데이터 ────────────────────────────────────────────────────────
-// 시드(사설 + 일부 공공) + 공공 API(전국 공공 보호소). 슬롯·알림 오버라이드 반영.
+// 시드 + 등록 보호소(실데이터) + 공공 API(전국 공공). 슬롯·알림 오버라이드 반영.
 function localShelters(): Shelter[] {
   const slotOverrides = readSlotsStore();
   const notifyOverrides = readNotifyStore();
-  return (sheltersSeed as Shelter[]).map((s) => ({
+  const base = [...(sheltersSeed as Shelter[]), ...readRegistered()];
+  return base.map((s) => ({
     ...s,
     slots: slotOverrides[s.id] ?? s.slots,
     notify: notifyOverrides[s.id] ?? s.notify,

@@ -3,13 +3,20 @@ import { bookedCount, getShelter, readBookings, writeBookings } from "@/lib/stor
 import { notifyShelter } from "@/lib/notify";
 import type { Booking } from "@/lib/types";
 
+// 공개 조회는 슬롯별 예약 인원 "집계"만 반환한다. (이름·전화 등 개인정보 비공개)
+// 신청자 상세는 오직 보호소 알림(이메일/웹훅)으로만 전달된다.
 export function GET(req: NextRequest) {
   const shelterId = req.nextUrl.searchParams.get("shelterId");
   const date = req.nextUrl.searchParams.get("date");
-  let bookings = readBookings();
-  if (shelterId) bookings = bookings.filter((b) => b.shelterId === shelterId);
-  if (date) bookings = bookings.filter((b) => b.date === date);
-  return NextResponse.json(bookings);
+  if (!shelterId || !date) {
+    return NextResponse.json({ error: "shelterId와 date가 필요합니다." }, { status: 400 });
+  }
+  const counts: Record<string, number> = {};
+  for (const b of readBookings()) {
+    if (b.shelterId !== shelterId || b.date !== date) continue;
+    counts[b.slotId] = (counts[b.slotId] ?? 0) + b.people;
+  }
+  return NextResponse.json({ counts });
 }
 
 export async function POST(req: NextRequest) {

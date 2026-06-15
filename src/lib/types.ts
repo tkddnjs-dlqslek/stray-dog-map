@@ -61,6 +61,8 @@ export interface Shelter {
   slots: TimeSlot[];
   /** 예약 발생 시 보호소가 알림을 받을 채널 (운영자 콘솔에서 설정) */
   notify?: NotifyConfig;
+  /** 데이터 출처: 시드/커뮤니티 등록/공공 API */
+  source?: "seed" | "community" | "public";
 }
 
 export interface NotifyConfig {

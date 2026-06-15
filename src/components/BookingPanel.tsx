@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import type { Booking, Shelter, TimeSlot } from "@/lib/types";
+import type { Shelter, TimeSlot } from "@/lib/types";
 
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -28,18 +28,20 @@ function fmtDate(iso: string): string {
 export default function BookingPanel({ shelter }: { shelter: Shelter }) {
   const [selected, setSelected] = useState<TimeSlot | null>(null);
   const [date, setDate] = useState<string>("");
-  const [bookings, setBookings] = useState<Booking[]>([]);
+  // 슬롯별 예약 인원 집계 (개인정보 없이 숫자만)
+  const [counts, setCounts] = useState<Record<string, number>>({});
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [people, setPeople] = useState(1);
   const [msg, setMsg] = useState<{ type: "ok" | "err"; text: string } | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // 선택한 날짜의 예약 현황을 불러와 정원 계산
+  // 선택한 날짜의 슬롯별 예약 집계를 불러와 정원 계산
   async function refreshBookings(d: string) {
     if (!d) return;
     const res = await fetch(`/api/bookings?shelterId=${shelter.id}&date=${d}`);
-    setBookings(res.ok ? await res.json() : []);
+    const data = res.ok ? await res.json() : { counts: {} };
+    setCounts(data.counts ?? {});
   }
 
   useEffect(() => {
@@ -52,9 +54,7 @@ export default function BookingPanel({ shelter }: { shelter: Shelter }) {
   );
 
   function bookedFor(slotId: string): number {
-    return bookings
-      .filter((b) => b.slotId === slotId)
-      .reduce((sum, b) => sum + b.people, 0);
+    return counts[slotId] ?? 0;
   }
 
   const remaining = selected ? selected.capacity - bookedFor(selected.id) : 0;

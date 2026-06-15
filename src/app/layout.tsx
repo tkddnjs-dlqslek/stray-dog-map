@@ -17,9 +17,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Link href="/" className="logo">
               🐾 멍플래너<span> · 봉사지도</span>
             </Link>
-            <Link href="/manage" className="nav-link">
-              운영자 콘솔
-            </Link>
+            <span className="nav-group">
+              <Link href="/register" className="nav-link">
+                보호소 등록
+              </Link>
+              <Link href="/manage" className="nav-link">
+                운영자 콘솔
+              </Link>
+            </span>
           </div>
         </header>
         {children}
