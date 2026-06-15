@@ -1,0 +1,271 @@
+[
+  {
+    "id": "seoul-mapo",
+    "name": "서울동물복지지원센터 (마포)",
+    "kind": "public",
+    "region": "서울",
+    "lat": 37.5563,
+    "lng": 126.9015,
+    "address": "서울특별시 마포구 매봉산로 31",
+    "phone": "02-2124-2839",
+    "description": "서울시 직영 동물복지지원센터. 유기견 산책·사회화 봉사를 정기 운영합니다. 봉사시간 인증은 1365를 통해 처리됩니다.",
+    "applyMethod": "link1365",
+    "link1365": "https://www.1365.go.kr/vols/search/realmList.do?searchWord=%EC%9C%A0%EA%B8%B0%EA%B2%AC",
+    "slots": []
+  },
+  {
+    "id": "seoul-eunpyeong",
+    "name": "은평 멍냥쉼터",
+    "kind": "private",
+    "region": "서울",
+    "lat": 37.6176,
+    "lng": 126.9227,
+    "address": "서울특별시 은평구 통일로 900",
+    "phone": "010-7777-8888",
+    "description": "도심 소규모 사설 쉼터. 평일 저녁·주말 산책 봉사 위주. 대중교통 접근성이 좋아 첫 봉사로 추천해요.",
+    "applyMethod": "self",
+    "slots": [
+      { "id": "e1", "weekday": 6, "start": "10:00", "end": "12:00", "capacity": 4, "label": "주말 오전 산책" },
+      { "id": "e2", "weekday": 0, "start": "14:00", "end": "16:00", "capacity": 4, "label": "주말 오후 산책 + 청소" },
+      { "id": "e3", "weekday": 4, "start": "19:00", "end": "21:00", "capacity": 2, "label": "목요일 저녁 급여" }
+    ]
+  },
+  {
+    "id": "gyeonggi-gwacheon",
+    "name": "행복이네 사설보호소",
+    "kind": "private",
+    "region": "경기",
+    "lat": 37.4292,
+    "lng": 126.9876,
+    "address": "경기도 과천시 중앙로 100",
+    "phone": "010-1234-5678",
+    "description": "개인이 운영하는 소규모 사설보호소입니다. 1365에 등록돼 있지 않아 일손이 늘 부족해요. 견사 청소·사료 급여·산책 봉사를 받습니다.",
+    "applyMethod": "self",
+    "slots": [
+      { "id": "s1", "weekday": 6, "start": "10:00", "end": "13:00", "capacity": 4, "label": "오전 견사 청소 + 산책" },
+      { "id": "s2", "weekday": 6, "start": "14:00", "end": "17:00", "capacity": 4, "label": "오후 산책 + 사회화" },
+      { "id": "s3", "weekday": 0, "start": "10:00", "end": "13:00", "capacity": 3, "label": "오전 견사 청소 + 산책" },
+      { "id": "s4", "weekday": 3, "start": "18:00", "end": "20:00", "capacity": 2, "label": "평일 저녁 급여 봉사" }
+    ]
+  },
+  {
+    "id": "gyeonggi-seongnam",
+    "name": "성남시 동물보호센터",
+    "kind": "public",
+    "region": "경기",
+    "lat": 37.4202,
+    "lng": 127.1267,
+    "address": "경기도 성남시 중원구 둔촌대로 100",
+    "phone": "031-700-0000",
+    "description": "성남시 위탁 운영 보호센터. 입양 전 유기견 돌봄·미용 보조 봉사를 운영하며 봉사 실적은 1365로 인증됩니다.",
+    "applyMethod": "link1365",
+    "link1365": "https://www.1365.go.kr/vols/search/realmList.do?searchWord=%EC%9C%A0%EA%B8%B0%EA%B2%AC",
+    "slots": []
+  },
+  {
+    "id": "gyeonggi-goyang",
+    "name": "햇살쉼터 (고양)",
+    "kind": "private",
+    "region": "경기",
+    "lat": 37.6584,
+    "lng": 126.8320,
+    "address": "경기도 고양시 일산동구 중앙로 1000",
+    "phone": "010-4444-5555",
+    "description": "노령견·장애견 전문 사설 쉼터. 무리한 활동보다 곁을 지켜주는 정적인 봉사가 많습니다. 첫 봉사자도 환영해요.",
+    "applyMethod": "self",
+    "slots": [
+      { "id": "g1", "weekday": 6, "start": "11:00", "end": "14:00", "capacity": 3, "label": "노령견 돌봄 + 말벗" },
+      { "id": "g2", "weekday": 0, "start": "11:00", "end": "14:00", "capacity": 3, "label": "노령견 돌봄 + 청소" },
+      { "id": "g3", "weekday": 5, "start": "15:00", "end": "18:00", "capacity": 2, "label": "금요일 오후 케어" }
+    ]
+  },
+  {
+    "id": "incheon-michuhol",
+    "name": "누리보호소",
+    "kind": "private",
+    "region": "인천",
+    "lat": 37.4563,
+    "lng": 126.7052,
+    "address": "인천광역시 미추홀구 인하로 100",
+    "phone": "010-2222-3333",
+    "description": "중대형견 위주 사설보호소. SNS로만 봉사 모집을 해왔으나 이제 타임테이블로 신청받습니다. 대형견 산책 경험자 환영.",
+    "applyMethod": "self",
+    "slots": [
+      { "id": "n1", "weekday": 6, "start": "09:00", "end": "12:00", "capacity": 6, "label": "대형견 오전 산책팀" },
+      { "id": "n2", "weekday": 0, "start": "13:00", "end": "16:00", "capacity": 6, "label": "오후 산책 + 목욕 보조" },
+      { "id": "n3", "weekday": 2, "start": "10:00", "end": "12:00", "capacity": 3, "label": "평일 견사 정비" }
+    ]
+  },
+  {
+    "id": "gangwon-chuncheon",
+    "name": "춘천 들꽃보호소",
+    "kind": "private",
+    "region": "강원",
+    "lat": 37.8813,
+    "lng": 127.7300,
+    "address": "강원특별자치도 춘천시 중앙로 50",
+    "phone": "010-3131-4141",
+    "description": "산자락에 위치한 사설보호소. 마당 산책과 자연 사회화가 강점이에요. 차량 이동이 편한 봉사자에게 적합합니다.",
+    "applyMethod": "self",
+    "slots": [
+      { "id": "c1", "weekday": 6, "start": "10:00", "end": "13:00", "capacity": 5, "label": "마당 산책 + 견사 청소" },
+      { "id": "c2", "weekday": 0, "start": "10:00", "end": "13:00", "capacity": 5, "label": "사회화 + 미용 보조" }
+    ]
+  },
+  {
+    "id": "daejeon-yuseong",
+    "name": "대전 동물보호센터",
+    "kind": "public",
+    "region": "대전",
+    "lat": 36.3624,
+    "lng": 127.3565,
+    "address": "대전광역시 유성구 대학로 100",
+    "phone": "042-600-0000",
+    "description": "대전시 위탁 보호센터. 입양 캠페인·돌봄 봉사를 정기 운영하며 봉사실적은 1365로 인증됩니다.",
+    "applyMethod": "link1365",
+    "link1365": "https://www.1365.go.kr/vols/search/realmList.do?searchWord=%EC%9C%A0%EA%B8%B0%EA%B2%AC",
+    "slots": []
+  },
+  {
+    "id": "chungnam-cheonan",
+    "name": "천안 포근한쉼터",
+    "kind": "private",
+    "region": "충남",
+    "lat": 36.8151,
+    "lng": 127.1139,
+    "address": "충청남도 천안시 동남구 만남로 50",
+    "phone": "010-5252-6363",
+    "description": "중소형견 위주 사설 쉼터. 봉사 후 입양 상담도 연결해드려요. 가족 단위 봉사 환영.",
+    "applyMethod": "self",
+    "slots": [
+      { "id": "t1", "weekday": 6, "start": "13:00", "end": "16:00", "capacity": 4, "label": "오후 산책 + 놀이" },
+      { "id": "t2", "weekday": 0, "start": "10:00", "end": "12:00", "capacity": 3, "label": "오전 청소 + 급여" }
+    ]
+  },
+  {
+    "id": "jeonbuk-jeonju",
+    "name": "전주 한울보호소",
+    "kind": "private",
+    "region": "전북",
+    "lat": 35.8242,
+    "lng": 127.1480,
+    "address": "전북특별자치도 전주시 완산구 한벽로 30",
+    "phone": "010-1717-1818",
+    "description": "장기 보호견이 많은 사설보호소. 꾸준히 와주는 정기 봉사자를 가장 반깁니다.",
+    "applyMethod": "self",
+    "slots": [
+      { "id": "j1", "weekday": 6, "start": "10:00", "end": "13:00", "capacity": 4, "label": "오전 산책 + 청소" },
+      { "id": "j2", "weekday": 3, "start": "16:00", "end": "18:00", "capacity": 2, "label": "평일 오후 케어" }
+    ]
+  },
+  {
+    "id": "gwangju-buk",
+    "name": "광주 동물보호센터",
+    "kind": "public",
+    "region": "광주",
+    "lat": 35.1740,
+    "lng": 126.9120,
+    "address": "광주광역시 북구 우치로 80",
+    "phone": "062-300-0000",
+    "description": "광주시 보호센터. 산책·사진촬영(입양홍보) 봉사를 운영하며 봉사실적은 1365로 인증됩니다.",
+    "applyMethod": "link1365",
+    "link1365": "https://www.1365.go.kr/vols/search/realmList.do?searchWord=%EC%9C%A0%EA%B8%B0%EA%B2%AC",
+    "slots": []
+  },
+  {
+    "id": "daegu-dalseo",
+    "name": "대구 달구벌쉼터",
+    "kind": "private",
+    "region": "대구",
+    "lat": 35.8295,
+    "lng": 128.5325,
+    "address": "대구광역시 달서구 달구벌대로 1000",
+    "phone": "010-9090-1010",
+    "description": "도심 사설 쉼터. 평일/주말 다양한 시간대 운영으로 직장인 봉사자도 참여하기 좋아요.",
+    "applyMethod": "self",
+    "slots": [
+      { "id": "d1", "weekday": 6, "start": "09:00", "end": "12:00", "capacity": 5, "label": "주말 오전 산책" },
+      { "id": "d2", "weekday": 0, "start": "14:00", "end": "17:00", "capacity": 5, "label": "주말 오후 사회화" },
+      { "id": "d3", "weekday": 2, "start": "19:00", "end": "21:00", "capacity": 3, "label": "화요일 저녁 급여" }
+    ]
+  },
+  {
+    "id": "busan-saha",
+    "name": "부산 바다별보호소",
+    "kind": "private",
+    "region": "부산",
+    "lat": 35.1043,
+    "lng": 128.9747,
+    "address": "부산광역시 사하구 낙동대로 200",
+    "phone": "010-2424-3535",
+    "description": "해안가 근처 사설보호소. 대형견 산책 코스가 좋습니다. 활동량 많은 봉사를 선호하는 분께 추천.",
+    "applyMethod": "self",
+    "slots": [
+      { "id": "b1", "weekday": 6, "start": "09:00", "end": "12:00", "capacity": 6, "label": "해변 산책팀" },
+      { "id": "b2", "weekday": 0, "start": "13:00", "end": "16:00", "capacity": 4, "label": "오후 목욕 + 청소" }
+    ]
+  },
+  {
+    "id": "busan-gijang",
+    "name": "부산 동물보호센터 (기장)",
+    "kind": "public",
+    "region": "부산",
+    "lat": 35.2444,
+    "lng": 129.2222,
+    "address": "부산광역시 기장군 정관로 100",
+    "phone": "051-700-0000",
+    "description": "부산시 위탁 보호센터. 돌봄·입양홍보 봉사를 운영하며 봉사실적은 1365로 인증됩니다.",
+    "applyMethod": "link1365",
+    "link1365": "https://www.1365.go.kr/vols/search/realmList.do?searchWord=%EC%9C%A0%EA%B8%B0%EA%B2%AC",
+    "slots": []
+  },
+  {
+    "id": "gyeongnam-changwon",
+    "name": "창원 햇님쉼터",
+    "kind": "private",
+    "region": "경남",
+    "lat": 35.2280,
+    "lng": 128.6811,
+    "address": "경상남도 창원시 의창구 중앙대로 100",
+    "phone": "010-6262-7373",
+    "description": "중소형견 위주 사설 쉼터. 미용·목욕 봉사 수요가 많아요. 반려 경험자 환영.",
+    "applyMethod": "self",
+    "slots": [
+      { "id": "w1", "weekday": 6, "start": "10:00", "end": "13:00", "capacity": 4, "label": "오전 산책 + 목욕" },
+      { "id": "w2", "weekday": 0, "start": "14:00", "end": "16:00", "capacity": 3, "label": "오후 미용 보조" }
+    ]
+  },
+  {
+    "id": "gyeongbuk-pohang",
+    "name": "포항 새벽보호소",
+    "kind": "private",
+    "region": "경북",
+    "lat": 36.0190,
+    "lng": 129.3435,
+    "address": "경상북도 포항시 남구 중앙로 50",
+    "phone": "010-8181-9292",
+    "description": "구조견이 많은 사설보호소. 견사 정비와 급여 봉사 일손이 특히 필요합니다.",
+    "applyMethod": "self",
+    "slots": [
+      { "id": "p1", "weekday": 6, "start": "09:00", "end": "12:00", "capacity": 5, "label": "오전 견사 정비 + 급여" },
+      { "id": "p2", "weekday": 0, "start": "13:00", "end": "15:00", "capacity": 3, "label": "오후 산책" }
+    ]
+  },
+  {
+    "id": "jeju-jeju",
+    "name": "제주 올레보호소",
+    "kind": "private",
+    "region": "제주",
+    "lat": 33.4996,
+    "lng": 126.5312,
+    "address": "제주특별자치도 제주시 중앙로 200",
+    "phone": "010-3636-4747",
+    "description": "제주 지역 사설보호소. 관광 봉사(워케이션) 형태로 찾아오는 봉사자도 많아요. 사전 연락 필수.",
+    "applyMethod": "self",
+    "slots": [
+      { "id": "z1", "weekday": 6, "start": "10:00", "end": "13:00", "capacity": 4, "label": "오전 산책 + 청소" },
+      { "id": "z2", "weekday": 0, "start": "10:00", "end": "13:00", "capacity": 4, "label": "오전 사회화" },
+      { "id": "z3", "weekday": 5, "start": "14:00", "end": "17:00", "capacity": 3, "label": "금요일 오후 케어" }
+    ]
+  }
+]
