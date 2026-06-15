@@ -216,6 +216,52 @@ a {
   border: 1px solid var(--line);
 }
 
+/* 카카오맵 커스텀 핀 (물방울 모양) */
+.kakao-pin {
+  width: 18px;
+  height: 18px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+}
+
+.kakao-pin:hover {
+  transform: rotate(-45deg) scale(1.15);
+}
+
+.kakao-info {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  min-width: 170px;
+  line-height: 1.45;
+}
+
+.kakao-info-addr {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.kakao-info-tag {
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.kakao-info-link {
+  display: inline-block;
+  margin-top: 6px;
+  color: var(--brand);
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .list {
   display: flex;
   flex-direction: column;
